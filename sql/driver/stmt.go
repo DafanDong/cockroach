@@ -21,6 +21,7 @@ import (
 	"database/sql/driver"
 
 	"github.com/cockroachdb/cockroach/sql/parser"
+	"github.com/cockroachdb/cockroach/sql/sqlwire"
 )
 
 type stmt struct {
@@ -38,9 +39,9 @@ func (s *stmt) NumInput() int {
 }
 
 func (s *stmt) Exec(args []driver.Value) (driver.Result, error) {
-	return s.conn.exec(s.stmt, args)
+	return s.conn.exec(sqlwire.Call{}, s.stmt, args)
 }
 
 func (s *stmt) Query(args []driver.Value) (driver.Rows, error) {
-	return s.conn.query(s.stmt, args)
+	return s.conn.query(sqlwire.Call{}, s.stmt, args)
 }
